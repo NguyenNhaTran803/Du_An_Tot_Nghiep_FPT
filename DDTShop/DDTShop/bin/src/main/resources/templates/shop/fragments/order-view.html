@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+</head>
+<body>
+    <div th:fragment="order-view">
+        <div class="modal fade" id="orderView-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" style="max-width: 1500px;" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="container quickView-container">
+                            <div class="quickView-content">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <table class="table table-mobile">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Mã đơn hàng</th>
+                                                    <th id="order__view__id">1</th>
+                                                </tr>
+                                                <!-- Các thông tin khác về đơn hàng -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <table class="table table-mobile">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Địa chỉ</th>
+                                                    <th id="order__view__address">1</th>
+                                                </tr>
+                                                <!-- Các thông tin khác về địa chỉ và người mua hàng -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <table class="table table-wishlist table-mobile">
+                                        <thead>
+                                            <tr>
+                                                <th>Sản phẩm</th>
+                                                <th>Giá</th>
+                                                <th>Số lượng</th>
+                                                <th>Giảm giá</th>
+                                                <th>Tổng tiền</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="order__view__body">
+                                            <!-- Dữ liệu sản phẩm trong đơn hàng -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

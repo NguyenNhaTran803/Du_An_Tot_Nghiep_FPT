@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{shop/layout.html}">
+<head>
+    <title>Giỏ hàng</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="page-header text-center" style="background-image: url('../shop/assets/images/page-header-bg.jpg')">
+            <div class="container">
+                <h1 class="page-title">Giỏ hàng<span>Cửa hàng</span></h1>
+            </div>
+        </div>
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/molla/home}">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/molla/shop}">Cửa hàng</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+                </ol>
+            </div>
+        </nav>
+        <div class="page-content">
+            <div class="cart">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <table class="table table-cart table-mobile">
+                                <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Giá</th>
+                                        <th>Giảm giá / 1 sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Tổng tiền</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dòng dữ liệu sản phẩm -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <aside class="col-lg-3">
+                            <div class="summary summary-cart">
+                                <h3 class="summary-title">Tổng giỏ hàng</h3>
+                                <table class="table table-summary">
+                                    <tbody>
+                                        <tr class="summary-subtotal">
+                                            <td>Tổng tiền:</td>
+                                            <td id="totailViewCart">0.00 VND</td>
+                                        </tr>
+                                        <tr class="summary-shipping">
+                                            <td>Vận chuyển:</td>
+                                            <td>&nbsp;</td>
+                                            <tr class="summary-shipping-row">
+											<td>
+												<div class="custom-control custom-radio">
+													<input type="radio" id="free-shipping" name="shipping"
+														checked="checked" class="custom-control-input" value="0"
+														th:onclick="handleShipingClick()"> <label
+														class="custom-control-label" for="free-shipping">Miễn
+														phí vận chuyển</label>
+												</div> <!-- End .custom-control -->
+											</td>
+											<td>0 VND</td>
+										</tr>
+                                        </tr>
+                                        <!-- Các dòng vận chuyển -->
+                                        <tr class="summary-total">
+                                            <td>Tổng:</td>
+                                            <td id="totailViewOrder">0.00 VND</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <a th:href="@{/molla/check-out}" th:if="${not #lists.isEmpty(carts)}" class="btn btn-outline-primary-2 btn-order btn-block">TIẾN HÀNH THANH TOÁN</a>
+                            </div>
+                            <a th:href="@{/molla/shop}" class="btn btn-outline-dark-2 btn-block mb-3"><span>TIẾP TỤC MUA SẮM</span><i class="icon-refresh"></i></a>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

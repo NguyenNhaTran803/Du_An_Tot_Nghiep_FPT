@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout.html}">
+
+<head>
+	<title>Thanh toán</title>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div class="page-header text-center" style="background-image: url('../shop/assets/images/page-header-bg.jpg')">
+			<div class="container">
+				<h1 class="page-title">
+					Thanh toán<span>Cửa hàng</span>
+				</h1>
+			</div>
+			<!-- End .container -->
+		</div>
+		<!-- End .page-header -->
+		<nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+			<div class="container">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{/ddt/home}">Trang
+							chủ</a></li>
+					<li class="breadcrumb-item"><a th:href="@{/ddt/cart}">Giỏ
+							hàng</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Thanh
+						toán</li>
+				</ol>
+			</div>
+			<!-- End .container -->
+		</nav>
+		<!-- End .breadcrumb-nav -->
+
+		<div class="page-content" style="padding-left: 5%; padding-right: 5%;">
+			<div class="checkout">
+				<div class="container">
+					<form th:action="@{/create_payment}" method="get" th:object="${orderAddressDto}">
+						<div class="row">
+							<div class="col-lg-9">
+								<h2 class="checkout-title">Chi tiết thanh toán</h2>
+								<!-- End .checkout-title -->
+								<input type="hidden" th:field="*{id}">
+								<div class="row">
+									<div class="col-sm-6">
+										<label>Họ:</label> 
+										<input type="text" class="form-control" required th:field="*{firstName}">
+									</div>
+
+									<div class="col-sm-6">
+										<label>Tên:</label> 
+										<input type="text" class="form-control" required th:field="*{lastName}">
+									</div>
+									
+									<div class="col-sm-6">	
+										<label>Email *</label>	 
+										<input type="email" class="form-control" required th:field="*{email}">
+									</div>	
+										
+									<div class="col-sm-6">	
+										<label>Số điện thoại *</label> 
+										<input type="text" class="form-control" required th:field="*{phone}"> 
+									</div>
+									<div class="col-sm-4">
+										<label>Tỉnh/Thành phố:</label>
+										<input type="text" class="form-control" required th:field="*{province}"> 
+									</div>
+									<div class="col-sm-4">
+											<label>Huyện/Thị trấn</label>
+											<input type="text" class="form-control" required th:field="*{district}"> 
+									</div>
+									<div class="col-sm-4">
+											<label>Xã/Phường:</label>
+											<input type="text" class="form-control" required th:field="*{ward}"> 
+									</div>	
+									<div class="col-sm-4">
+											<label>Địa chỉ giao hàng:</label>
+											<input type="text" class="form-control" required th:field="*{address}"> 
+									</div>
+								</div>
+
+								<label>Ghi chú</label>
+								<textarea class="form-control" cols="30" rows="4" name="note" id="note"
+									placeholder="Ghi chú của bạn về đơn hàng."></textarea>
+							</div>
+							<!-- End .col-lg-9 -->
+							<aside class="col-lg-3">
+								<div class="summary">
+									<h3 class="summary-title">Đơn hàng của bạn</h3>
+									<!-- End .summary-title -->
+
+									<table class="table table-summary">
+										<thead>
+											<tr>
+												<th>Sản phẩm</th>
+												<th>Tổng</th>
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr th:each="item, i : ${carts}"
+												th:with="totalPrice = ${item.discount > 0 ? (item.price - (item.price * item.discount * 0.01)) * item.quantity : item.price * item.quantity}">
+												<td><a th:href="@{/ddt/product-detail(id=${item.id})}"
+														th:text="${item.name}"></a></td>
+												<td
+													th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'">
+													$84.00</td>
+											</tr>
+											<!-- End .summary-subtotal -->
+											<tr th:if="${shipping == '0'}">
+												<td>Giao hàng:</td>
+												<td>Miễn phí 0 VND</td>
+											</tr>
+											<tr th:if="${shipping == '1'}">
+												<td>Giao hàng:</td>
+												<td>Tiêu chuẩn 10.000 VND</td>
+											</tr>
+											<tr th:if="${shipping == '2'}">
+												<td>Giao hàng:</td>
+												<td>Chính xác 20.000 VND</td>
+											</tr>
+											<tr class="summary-total">
+												<td>Tổng hoá đơn:</td>
+												<td
+													th:text="${#numbers.formatDecimal(totalCart, 0, 'COMMA', 0, 'POINT')} + ' VND'">
+													$160.00</td>
+											</tr>
+											<!-- End .summary-total -->
+										</tbody>
+									</table>
+
+									<button type="submit" th:if="${not #lists.isEmpty(carts)}"
+										class="btn btn-outline-primary-2 btn-order btn-block">
+										<span class="btn-text">Thanh toán</span> <span class="btn-hover-text">Tiến hành
+											thanh toán</span>
+									</button>
+									<!-- End .table table-summary -->
+
+								</div>
+								<!-- End .summary -->
+							</aside>
+							<!-- End .col-lg-3 -->
+						</div>
+						<!-- End .row -->
+					</form>
+				</div>
+				<!-- End .container -->
+			</div>
+			<!-- End .checkout -->
+		</div>
+		<!-- End .page-content -->
+	</div>
+<script>
+		function processPayment() {
+			var cashOnDelivery = document.getElementById("cashOnDelivery");
+			var vnPay = document.getElementById("vnPay");
+
+			// Kiểm tra xem người dùng đã chọn radio button "Thanh toán VNPAY" hay chưa
+			if (vnPay.checked) {
+				// Nếu chọn, chuyển hướng đến trang thanh toán VNPAY
+				redirectToVNPay();
+			} else {
+				// Nếu không, thực hiện xử lý thanh toán tại đây
+				alert("Bạn đã chọn phương thức thanh toán khác!");
+			}
+		}
+
+		function redirectToVNPay() {
+			// Thay thế đường dẫn này bằng URL VNPAY thực tế của bạn
+			var vnPayUrl = 'shop/vnpay/index';
+
+			// Chuyển hướng đến trang thanh toán VNPAY
+			window.location.href = vnPayUrl;
+		}
+		
+		
+
+
+	</script>
+</body>
+
+</html>

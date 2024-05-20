@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{shop/layout.html}">
+
+<head>
+<title>Chi tiết sản phẩm</title>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+			<div class="container d-flex align-items-center">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{/ddt/home}">Trang
+							chủ</a></li>
+					<li class="breadcrumb-item"><a th:href="@{/ddt/shop}">Cửa
+							hàng</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Chi
+						tiết sản phẩm</li>
+				</ol>
+
+			</div>
+			<!-- End .container -->
+		</nav>
+		<!-- End .breadcrumb-nav -->
+
+		<div class="page-content" style="padding-left: 5%; padding-right: 5%;">
+			<div class="container">
+				<div class="product-details-top">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="product-gallery product-gallery-separated">
+
+								<span
+									th:if="${product.startDayDiscount != null and product.endDayDiscount != null and product.discount > 0}">
+									<span class="product-label label-sale"
+									th:if="${product.startDayDiscount.before(#dates.createNow()) and product.endDayDiscount.after(#dates.createNow())}"
+									th:text="${product.discount + ' % giảm'}"></span>
+								</span> <span
+									th:if="${product.startDayDiscount != null and product.endDayDiscount != null and product.discount > 0}">
+									<span class="product-label"
+									th:if="${product.startDayDiscount.after(#dates.createNow())}">Sắp
+										giảm giá</span>
+								</span>
+
+								<div class="row">
+									<div class="col-md-6" th:each="item, i : ${listImage}">
+										<figure class="product-separated-item">
+											<img
+												th:src="${item.name} == null ? '/shop/assets/images/no-image.jpg' : '/uploads/' + ${item.name}"
+												alt="product image">
+										</figure>
+									</div>
+								</div>
+
+							</div>
+							<!-- End .product-gallery -->
+						</div>
+						<!-- End .col-md-6 -->
+
+						<div class="col-md-6">
+							<div class="product-details sticky-content">
+								<h1 class="product-title" th:text="${product.name}"></h1>
+								<!-- End .product-title -->
+
+								<div class="product-price"
+									th:if="${product.startDayDiscount == null or product.endDayDiscount == null or product.discount <= 0}"
+									th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">150.000
+									VND</div>
+
+								<div class="product-price"
+									th:if="${product.startDayDiscount != null and product.endDayDiscount != null and product.discount > 0}">
+									<span
+										th:if="${product.startDayDiscount.after(#dates.createNow())}"
+										th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">150.000
+										VND</span> <span
+										th:if="${product.startDayDiscount.before(#dates.createNow()) and product.endDayDiscount.after(#dates.createNow())}">
+										<span class="new-price"
+										th:text="${#numbers.formatDecimal(product.price - (product.price * product.discount * 0.01), 0, 'COMMA', 0, 'POINT')} + ' VND'">150.000
+											VND</span> <span class="old-price"> <del
+												th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VND'">
+												150.000 VND</del></span>
+
+									</span>
+								</div>
+								<!-- End .product-price -->
+
+								<div class="details-filter-row details-row-size">
+									<label for="size_product">Kích thước:</label>
+									<div class="select-custom">
+										<select name="cart_detail_size" id="cart_detail_size"
+											class="form-control">
+											<!-- Hiển thị chỉ kích thước của sản phẩm trong dropdown -->
+											<option th:each="size : ${product.size}"
+												th:value="${size.id}" th:text="${size.name}"></option>
+										</select>
+									</div>
+									<!-- End .select-custom -->
+								</div>
+
+								<!-- End .details-filter-row -->
+
+								<div class="details-filter-row details-row-size">
+									<label for="size_product">Màu sắc:</label>
+									<div class="select-custom">
+										<select name="cart_detail_color" id="cart_detail_color"
+											class="form-control">
+											<!-- Sử dụng Thymeleaf để lặp qua danh sách kích thước và hiển thị trong dropdown -->
+											<option th:each="color : ${product.color}"
+												th:value="${color.id}" th:text="${color.name}"></option>
+										</select>
+
+									</div>
+									<!-- End .select-custom -->
+								</div>
+								<!-- End .details-filter-row -->
+
+								<div class="details-filter-row details-row-size">
+									<label for="qty">Số lượng:</label>
+									<div class="product-details-quantity">
+										<input type="number" id="cart_detail_qty" class="form-control"
+											value="1" min="1" max="10" step="1" data-decimals="0"
+											required>
+									</div>
+									<!-- End .product-details-quantity -->
+
+								</div>
+								<!-- End .details-filter-row -->
+
+								<div class="product-details-action">
+									<a th:data-id="${product.id}"
+										th:onclick="addCartDetail(this.getAttribute('data-id'))"
+										class="btn-product btn-cart" style="cursor: pointer;"><span>Thêm
+											vào giỏ hàng</span></a>
+
+									<div class="details-action-wrapper">
+										<a href="#" class="btn-product btn-wishlist" title="Yêu thích"
+											th:data-id="${product.id}"
+											th:onclick="addLikeShop(this.getAttribute('data-id'))"><span>Yêu
+												thích</span></a>
+									</div>
+									<!-- End .details-action-wrapper -->
+								</div>
+								<!-- End .product-details-action -->
+
+								<div class="product-details-footer">
+
+									<div class="social-icons social-icons-sm">
+										<span class="social-label">Chia sẻ:</span> <a href="#"
+											class="social-icon" title="Facebook" target="_blank"><i
+											class="icon-facebook-f"></i></a> <a href="#" class="social-icon"
+											title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+										<a href="#" class="social-icon" title="Instagram"
+											target="_blank"><i class="icon-instagram"></i></a> <a
+											href="#" class="social-icon" title="Pinterest"
+											target="_blank"><i class="icon-pinterest"></i></a>
+									</div>
+								</div>
+								<!-- End .product-details-footer -->
+
+								<div class="accordion accordion-plus product-details-accordion"
+									id="product-accordion">
+									<div class="card card-box card-sm">
+										<div class="card-header" id="product-desc-heading">
+											<h2 class="card-title">
+												<a class="collapsed" role="button" data-toggle="collapse"
+													href="#product-accordion-desc" aria-expanded="false"
+													aria-controls="product-accordion-desc"> Mô tả sản phẩm
+												</a>
+											</h2>
+										</div>
+										<!-- End .card-header -->
+										<div id="product-accordion-desc" class="collapse"
+											aria-labelledby="product-desc-heading"
+											data-parent="#product-accordion">
+											<div class="card-body">
+												<div class="product-desc-content"
+													th:utext="${product.description}"></div>
+												<!-- End .product-desc-content -->
+											</div>
+											<!-- End .card-body -->
+										</div>
+										<!-- End .collapse -->
+									</div>
+									<!-- End .card -->
+
+									<div class="card card-box card-sm">
+										<div class="card-header" id="product-info-heading">
+											<h2 class="card-title">
+												<a role="button" data-toggle="collapse"
+													href="#product-accordion-info" aria-expanded="true"
+													aria-controls="product-accordion-info"> Thông tin sản
+													phẩm </a>
+											</h2>
+										</div>
+										<!-- End .card-header -->
+										<div id="product-accordion-info" class="collapse show"
+											aria-labelledby="product-info-heading"
+											data-parent="#product-accordion">
+											<div class="card-body">
+												<div class="product-desc-content" th:utext="${product.info}"></div>
+												<!-- End .product-desc-content -->
+											</div>
+											<!-- End .card-body -->
+										</div>
+										<!-- End .collapse -->
+									</div>
+									<!-- End .card -->
+
+									<div class="card card-box card-sm">
+										<div class="card-header" id="product-shipping-heading">
+											<h2 class="card-title">
+												<a class="collapsed" role="button" data-toggle="collapse"
+													href="#product-accordion-shipping" aria-expanded="false"
+													aria-controls="product-accordion-shipping"> Vẫn chuyển
+												</a>
+											</h2>
+										</div>
+										<!-- End .card-header -->
+										<div id="product-accordion-shipping" class="collapse"
+											aria-labelledby="product-shipping-heading"
+											data-parent="#product-accordion">
+											<div class="card-body">
+												<div class="product-desc-content">
+													<p>
+														Chúng tôi giao hàng đến hơn 100 quốc gia trên thế giới. Vì
+														chi tiết đầy đủ về các tùy chọn giao hàng chúng tôi cung
+														cấp, vui lòng xem <a href="#">Thông tin giao hàng</a><br>
+														của chúng tôi Chúng tôi hy vọng bạn sẽ thích mỗi lần mua
+														hàng, nhưng nếu bạn cần quay lại một mặt hàng bạn có thể
+														làm như vậy trong vòng một tháng kể từ khi nhận được. Cho
+														đầy đủ chi tiết về cách trả lại, vui lòng xem <a của chúng
+															tôi href="#">Trả về thông tin</a>
+													</p>
+												</div>
+												<!-- End .product-desc-content -->
+											</div>
+											<!-- End .card-body -->
+										</div>
+										<!-- End .collapse -->
+									</div>
+									<!-- End .card -->
+								</div>
+								<!-- End .accordion -->
+							</div>
+							<!-- End .product-details -->
+						</div>
+						<!-- End .col-md-6 -->
+					</div>
+					<!-- End .row -->
+				</div>
+				<!-- End .product-details-top -->
+
+				<hr class="mt-3 mb-5">
+
+
+			</div>
+			<!-- End .container -->
+		</div>
+		<!-- End .page-content -->
+	</div>
+</body>
+
+</html>
