@@ -1,0 +1,179 @@
+CREATE DATABASE DATN_KDLAPTOP_ONLINE
+-- VAI TRO
+CREATE TABLE Role(
+	RoleID INT IDENTITY(1,1) NOT NULL,
+	Rolename NVARCHAR(50) NULL,
+)
+-- TAI KHOAN VAI TRO
+CREATE TABLE AccountRole(
+	ID INT IDENTITY(1,1) NOT NULL,
+	RoleID INT NULL,
+	AccountID INT NULL,
+	)
+	-- VAI TRO
+CREATE TABLE Accounts(
+	AccountID INT IDENTITY(1,1) NOT NULL,
+	Username NVARCHAR(50) NULL,
+	Password NVARCHAR(100) NULL,
+	Active BIT NULL,
+	Email NVARCHAR(100) NULL,
+	)
+ -- DIA CHI
+CREATE TABLE Address(
+	AddressID INT IDENTITY(1,1) NOT NULL,
+	Tinhthanhpho NVARCHAR(50) NULL,
+	Quanhuyen NVARCHAR(50) NULL,
+	Phuongxa NVARCHAR(50) NULL,
+	Sonha NVARCHAR(20) NULL,
+	Duong NVARCHAR(50) NULL,
+	CustomerID INT NULL,
+	status BIT NULL,
+ )
+CREATE TABLE Brands(
+	BrandID INT IDENTITY(1,1) NOT NULL,
+	Brandname NVARCHAR(100) NULL,
+ )
+ -- GIO HANG
+CREATE TABLE Cart(
+	CartID INT IDENTITY(1,1) NOT NULL,
+	CustomerID INT NULL,
+	ProductID INT NULL,
+	Quantity INT NULL,
+	)
+ --DANH MUC SAN PHAM
+CREATE TABLE Categoryproduct(
+	 ID  INT NOT NULL,
+	Categoryname  NVARCHAR(max) NULL,-- TEN DANH MUC SAN PHAM
+	IDcapcha INT NULL,
+)
+-- KHACH HANG
+CREATE TABLE Customer(
+	CustomerID INT IDENTITY(1,1) NOT NULL,
+	Name NVARCHAR(100) NULL,
+	Phone NVARCHAR(20) NULL,
+	AccountID INT NULL,
+	Image NVARCHAR(250) NULL,
+ )
+
+-- DANH GIA
+CREATE TABLE Evaluate(
+	EvaluateID INT IDENTITY(1,1) NOT NULL,
+	ProductID INT NULL,
+	CustomerID INT NULL,
+	Evaluatestar INT NULL,
+	Evaluatedate DATETIME NULL,
+	Comment NVARCHAR(250) NULL,
+	Image1 NVARCHAR(250) NULL,
+	Image2 NVARCHAR(250) NULL,
+	Image3 NVARCHAR(250) NULL,
+	Image4 NVARCHAR(250) NULL,
+	Image5 NVARCHAR(250) NULL,
+	Evaluatestatus BIT NULL,
+	)
+	-- HANG TON KHO
+CREATE TABLE Inventory(
+	InventoryID INT IDENTITY(1,1) NOT NULL,
+	ProductID INT NULL,
+	WarehouseID INT NULL,
+	Quantityonhand INT NULL,
+	Lastupdatedate DATETIME NULL,
+	)
+	-- NHAN VIEN
+	CREATE TABLE Employee(
+	EmployeeID INT IDENTITY(1,1) NOT NULL,
+	Name NVARCHAR(50) NULL,
+	Phone NVARCHAR(20) NULL,
+	Address NVARCHAR(100) NULL,
+	AccountID INT NULL,
+)
+ -- DAT HANG
+CREATE TABLE O_Order(
+	OrderID INT IDENTITY(1,1) NOT NULL,
+	OrderstatusID INT NULL,
+	AddressID INT NULL,
+	CustomerID INT NULL,
+	DiscountID INT NULL,
+	PaymentID INT NULL,
+	Sumpayment FLOAT NULL,
+	Time DATETIME NULL,
+ )
+-- CHI TIET DON HANG
+CREATE TABLE Orderdetails(
+	OrderdetailsID INT IDENTITY(1,1) NOT NULL,
+	OrderID INT NULL,
+	ProductID INT NULL,
+	Productquantity INT NULL,
+	Totalpayment FLOAT NULL,
+	Price FLOAT NULL,
+	EvaluateID INT NULL,
+ )
+ -- TINH TRANG DAT HANG
+CREATE TABLE Orderstatus(
+	OrderstatusID INT IDENTITY(1,1) NOT NULL,
+	Orderstatusname NVARCHAR(250) NULL,
+)
+-- PHUONG THUC CHI TRA
+CREATE TABLE Payment(
+	PaymentID INT IDENTITY(1,1) NOT NULL,
+	Paymentname NVARCHAR(40) NULL,
+	)
+-- CONSTRAINT [PK__Payment__9B556A58B70BE37D] PRIMARY KEY CLUSTERED 
+-- SAN PHAM
+CREATE TABLE Product(
+	ProductID INT IDENTITY(1,1) NOT NULL,
+	Productname NVARCHAR(50) NULL,
+	Description NVARCHAR(max) NULL,
+	Productactivate BIT NULL,
+	Viewcount INT NULL,
+	BrandID INT NULL,
+	Createdby INT NULL,
+	Createddate DATETIME NULL,
+	PriceNhap FLOAT NULL,
+	PriceXuat FLOAT NULL,
+	CategoryID INT NULL,
+	)
+ --HINH SAN PHAM
+CREATE TABLE Productimage(
+	ID INT IDENTITY(1,1) NOT NULL,
+	Image NVARCHAR(250) NULL,
+	ProductID INT NULL,
+ )
+ 
+ -- NHAP XUAT KHO HANG
+CREATE TABLE StoclMovement(
+	MovementID INT IDENTITY(1,1) NOT NULL,
+	ProductID INT NULL,
+	WarehouseID INT NULL,
+	Quantity INT NULL,
+	Movementdate DATETIME NULL,
+	Movementtype BIT NULL,
+)
+
+-- THONG TIN GIAO DICH
+CREATE TABLE Transactions(
+	TransactionID INT IDENTITY(1,1) NOT NULL,
+	OrderID INT NULL,
+	Amount INT NULL,
+	Status INT NULL,
+	Date DATETIME NULL,
+	Message NVARCHAR(max) NULL,
+	Bank NVARCHAR(100) NULL,
+)
+
+-- CAP NHAT LICH SU SAN PHAM
+CREATE TABLE Updatehistoryproduct(
+	UpdateID INT IDENTITY(1,1) NOT NULL,
+	EmployeeID INT NULL,
+	ProductID INT NULL,
+	Updatedate DATETIME NULL,
+)
+-- THONG TIN KHO HANG
+CREATE TABLE Warehouses(
+	WarehouseID INT IDENTITY(1,1) NOT NULL,
+	Warehousename NVARCHAR(100) NULL,
+	Location NVARCHAR(150) NULL,
+	Capacity INT NULL,
+)
+
+ 
+ 
